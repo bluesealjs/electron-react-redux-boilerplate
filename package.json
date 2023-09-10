@@ -29,11 +29,6 @@
     "source",
     "webpack"
   ],
-  "engines": {
-    "node": ">=9.0.0",
-    "npm": ">=5.0.0",
-    "yarn": ">=1.0.0"
-  },
   "browserslist": [
     "last 4 versions"
   ],
@@ -46,6 +41,11 @@
     "postpackage": "rimraf builds && electron-packager ./ --out=./builds"
   },
   "dependencies": {
+    "@tensorflow-models/qna": "^1.0.2",
+    "@tensorflow/tfjs-backend-cpu": "^4.10.0",
+    "@tensorflow/tfjs-backend-webgl": "^4.10.0",
+    "@tensorflow/tfjs-converter": "^4.10.0",
+    "@tensorflow/tfjs-core": "^4.10.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
@@ -62,7 +62,7 @@
     "babili-webpack-plugin": "^0.1.2",
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.3",
-    "electron": "^9.0.0",
+    "electron": "^9.4.4",
     "electron-devtools-installer": "^3.0.0",
     "electron-packager": "^14.2.1",
     "file-loader": "^6.0.0",
