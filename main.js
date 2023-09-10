@@ -2,7 +2,7 @@
 
 // Import parts of electron to use
 const { app, BrowserWindow, ipcMain } = require("electron");
-const path = require("path");
+const path = require("node:path");
 const url = require("url");
 const { getQnA } = require("./getQnA");
 
@@ -42,10 +42,9 @@ function createWindow() {
       nodeIntegration: true,
       // nodeIntegrationInWorker: true,
       // nodeIntegrationInSubFrames: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-      // preload: path.join(__dirname, "preload.js"),
-      preload: path.join(app.getAppPath(), "preload.js"),
+      contextIsolation: true,
+      // enableRemoteModule: true,
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
@@ -99,7 +98,23 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on("activate", () => {
+    if (mainWindow === null) {
+      createWindow();
+    }
+  });
+
+  // get answers from a question
+  ipcMain.on("qna:ans", async (e, options) => {
+    console.log(options);
+    const tempData = await getQnA(options.ques, options.text);
+    // Send success to renderer
+    mainWindow.webContents.send("qna:done", tempData);
+  });
+});
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
@@ -110,18 +125,10 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("activate", () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
-
-// get answers from a question
-ipcMain.on("qna:ans", async (e, options) => {
-  console.log(options);
-  const tempData = await getQnA(options.ques, options.text);
-  // Send success to renderer
-  mainWindow.webContents.send("qna:done", tempData);
-});
+// app.on("activate", () => {
+//   // On macOS it's common to re-create a window in the app when the
+//   // dock icon is clicked and there are no other windows open.
+//   if (mainWindow === null) {
+//     createWindow();
+//   }
+// });

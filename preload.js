@@ -20,10 +20,10 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   on: (channel, func) =>
     ipcRenderer.on(channel, (event, ...args) => func(...args)),
 });
-contextBridge.exposeInMainWorld("electron", {
-  ipcRenderer: {
-    ...ipcRenderer,
-    on: ipcRenderer.on.bind(ipcRenderer),
-    removeListener: ipcRenderer.removeListener.bind(ipcRenderer),
-  },
-});
+// contextBridge.exposeInMainWorld("electron", {
+//   ipcRenderer: {
+//     ...ipcRenderer,
+//     on: ipcRenderer.on.bind(ipcRenderer),
+//     removeListener: ipcRenderer.removeListener.bind(ipcRenderer),
+//   },
+// });
