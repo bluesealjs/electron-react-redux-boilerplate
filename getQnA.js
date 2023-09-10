@@ -1,14 +1,14 @@
 const path = require("path");
+const tfn = require("@tensorflow/tfjs-node");
 const qna = require("@tensorflow-models/qna");
 require("@tensorflow/tfjs-core");
 require("@tensorflow/tfjs-backend-cpu");
 require("@tensorflow/tfjs-backend-webgl");
-// import tfn from "@tensorflow/tfjs-node";
 
-// const MODEL_JSON = tfn.io.fileSystem("./qna-models/model.json");
+const MODEL_URL = tfn.io.fileSystem("./qna-models/model.json");
 let folder = process.cwd();
 let modelPromise = {};
-const MODEL_URL = path.join(__dirname, "/qna-models/model.json");
+// const MODEL_URL = path.join(__dirname, "/qna-models/model.json");
 // const MODEL_URL = "file://" + folder + "/qna-models/model.json";
 // const MODEL_URL = path.resolve("/qna-models/model.json");
 
@@ -22,6 +22,7 @@ const init = async () => {
 };
 init();
 const getQnA = async (ques, text) => {
+  console.log({ ques, text });
   let answers;
   try {
     const model = await modelPromise;

@@ -40,8 +40,12 @@ function createWindow() {
     show: false,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: true,
-      preload: path.join(__dirname, "preload.js"),
+      // nodeIntegrationInWorker: true,
+      // nodeIntegrationInSubFrames: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+      // preload: path.join(__dirname, "preload.js"),
+      preload: path.join(app.getAppPath(), "preload.js"),
     },
   });
 
@@ -71,14 +75,14 @@ function createWindow() {
 
     // Open the DevTools automatically if developing
     if (dev) {
-      const {
-        default: installExtension,
-        REACT_DEVELOPER_TOOLS,
-      } = require("electron-devtools-installer");
+      // const {
+      //   default: installExtension,
+      //   REACT_DEVELOPER_TOOLS,
+      // } = require("electron-devtools-installer");
 
-      installExtension(REACT_DEVELOPER_TOOLS).catch((err) =>
-        console.log("Error loading React DevTools: ", err)
-      );
+      // installExtension(REACT_DEVELOPER_TOOLS).catch((err) =>
+      //   console.log("Error loading React DevTools: ", err)
+      // );
       mainWindow.webContents.openDevTools();
     }
   });
@@ -116,7 +120,7 @@ app.on("activate", () => {
 
 // get answers from a question
 ipcMain.on("qna:ans", async (e, options) => {
-  // console.log(options);
+  console.log(options);
   const tempData = await getQnA(options.ques, options.text);
   // Send success to renderer
   mainWindow.webContents.send("qna:done", tempData);

@@ -13,28 +13,28 @@ const Home = (props) => {
 
   useEffect(() => {
     // When done, show message
-    ipcRenderer.on("qna:done", (data) => {
-      setAns(data);
-    });
+    window.ipcRenderer &&
+      window.ipcRenderer.on("qna:done", (answers) => {
+        let tempAns = answers
+          .map((answer) => answer.text + " (score =" + answer.score + ")")
+          .join("\n\n");
+        setAns(tempAns);
+
+        console.log(answers);
+      });
   }, []);
 
   // On top layout
   const doAnalyze = async (event) => {
-    // console.log("------ Analysing ...");
+    console.log("------ Analysing ...");
     setLoading(true);
 
     try {
-      ipcRenderer.send("qna:ans", {
-        ques,
-        text,
-      });
-
-      let tempAns = answers
-        .map((answer) => answer.text + " (score =" + answer.score + ")")
-        .join("\n\n");
-
-      setAns(tempAns);
-      console.log(answers);
+      window.ipcRenderer &&
+        window.ipcRenderer.send("qna:ans", {
+          ques,
+          text,
+        });
     } catch (err) {
       console.log("err: ", err.message);
     }
